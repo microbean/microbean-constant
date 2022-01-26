@@ -28,6 +28,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,6 +37,7 @@ import java.util.function.Function;
 
 import static java.lang.constant.ConstantDescs.BSM_INVOKE;
 import static java.lang.constant.ConstantDescs.CD_List;
+import static java.lang.constant.ConstantDescs.CD_Map;
 import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_Set;
 import static java.lang.constant.ConstantDescs.NULL;
@@ -68,6 +71,73 @@ public final class Constables {
                                                                              final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     return describeConstable(elements, CD_Set, f);
   }
+
+  public static final <K, V> Optional<? extends ConstantDesc> describeConstable(final Map<? extends K, ? extends V> map,
+                                                                                final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
+                                                                                final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
+    if (map == null) {
+      return Optional.of(NULL);
+    } else if (map instanceof Constable c) {
+      return c.describeConstable();
+    } else if (map.isEmpty()) {
+      return Optional.of(DynamicConstantDesc.of(BSM_INVOKE, MethodHandleDesc.ofMethod(DirectMethodHandleDesc.Kind.INTERFACE_STATIC,
+                                                                                      CD_Map,
+                                                                                      "of",
+                                                                                      MethodTypeDesc.of(CD_Map))));
+    } else {
+      // No need for an instanceof ConstantDesc check; ConstantDesc is
+      // sealed and none of its permitted subtypes is a Map
+      final int mapSize = map.size();
+      final ConstantDesc[] bsmInvokeArguments = new ConstantDesc[mapSize + 1];
+      bsmInvokeArguments[0] =
+        MethodHandleDesc.ofMethod(DirectMethodHandleDesc.Kind.INTERFACE_STATIC,
+                                  CD_Map,
+                                  "ofEntries",
+                                  MethodTypeDesc.of(Entry.class.describeConstable().orElseThrow().arrayType()));
+      int i = 1;
+      for (final Entry<? extends K, ? extends V> entry : map.entrySet()) {
+        final Optional<? extends ConstantDesc> e = describeConstable(entry, kf, vf);
+        if (e.isEmpty()) {
+          return Optional.empty();
+        }
+        bsmInvokeArguments[i++] = e.orElseThrow();
+      }
+      return Optional.of(DynamicConstantDesc.of(BSM_INVOKE, bsmInvokeArguments));
+    }
+  }
+
+  public static final <K, V> Optional<? extends ConstantDesc> describeConstable(final Entry<? extends K, ? extends V> entry,
+                                                                                final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
+                                                                                final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
+    if (entry == null) {
+      return Optional.of(NULL);
+    } else if (entry instanceof Constable c) {
+      return c.describeConstable();
+    } else {
+      // No need for an instanceof ConstantDesc check; ConstantDesc is
+      // sealed and none of its permitted subtypes is an Entry
+      final K k = entry.getKey();
+      final Optional<? extends ConstantDesc> key = k instanceof Constable c ? c.describeConstable() : kf.apply(k);
+      if (key.isPresent()) {
+        final V v = entry.getValue();
+        final Optional<? extends ConstantDesc> value = v instanceof Constable c ? c.describeConstable() : vf.apply(v);
+        if (value.isPresent()) {
+          // Map#entry(K, V)
+          return
+            Optional.of(DynamicConstantDesc.of(BSM_INVOKE,
+                                               MethodHandleDesc.ofMethod(DirectMethodHandleDesc.Kind.INTERFACE_STATIC,
+                                                                         CD_Map,
+                                                                         "entry",
+                                                                         MethodTypeDesc.of(Entry.class.describeConstable().orElseThrow(),
+                                                                                           CD_Object, // K erasure
+                                                                                           CD_Object)), // V erasure
+                                               key.orElseThrow(),
+                                               value.orElseThrow()));
+        }
+      }
+      return Optional.empty();
+    }
+  }
   
   private static final <E> Optional<? extends ConstantDesc> describeConstable(final Collection<? extends E> elements,
                                                                               final ClassDesc listOrSetClassDesc,
@@ -76,40 +146,41 @@ public final class Constables {
       return Optional.of(NULL);
     } else if (elements instanceof Constable c) {
       return c.describeConstable();
-    } else if (elements instanceof ConstantDesc cd) {
-      return Optional.of(cd);
+    } else if (elements.isEmpty()) {
+      return Optional.of(DynamicConstantDesc.of(BSM_INVOKE, MethodHandleDesc.ofMethod(DirectMethodHandleDesc.Kind.INTERFACE_STATIC,
+                                                                                      listOrSetClassDesc,
+                                                                                      "of",
+                                                                                      MethodTypeDesc.of(listOrSetClassDesc))));
     } else {
+      // No need for an instanceof ConstantDesc check; ConstantDesc is
+      // sealed and none of its permitted subtypes is a Collection
       final int elementsSize = elements.size();
       final ConstantDesc[] bsmInvokeArguments = new ConstantDesc[elementsSize + 1];
       final MethodTypeDesc ofMethodTypeDesc;
-      if (elementsSize == 0) {
-        ofMethodTypeDesc = MethodTypeDesc.of(listOrSetClassDesc);
-      } else if (elementsSize < 11) {
+      if (elementsSize < 11) {
         // List.of() and Set.of() have explicit polymorphic overrides
-        // for parameter counts of up to 11.
+        // for parameter counts of up to 10.
         final ClassDesc[] paramDescs = new ClassDesc[elementsSize];
         Arrays.fill(paramDescs, CD_Object); // Object is the erasure of E
         ofMethodTypeDesc = MethodTypeDesc.of(listOrSetClassDesc, paramDescs);
       } else {
-        // After 11 parameters, List.of() and Set.of() fall back on
+        // After 10 parameters, List.of() and Set.of() fall back on
         // varargs.
         ofMethodTypeDesc =
           MethodTypeDesc.of(listOrSetClassDesc, CD_Object.arrayType()); // Object is the erasure of E
       }
       bsmInvokeArguments[0] =
         MethodHandleDesc.ofMethod(DirectMethodHandleDesc.Kind.INTERFACE_STATIC, listOrSetClassDesc, "of", ofMethodTypeDesc);
-      if (elementsSize > 0) {
-        int i = 1;
-        for (final E element : elements) {
-          final Optional<? extends ConstantDesc> arg = f.apply(element);
-          if (arg == null || arg.isEmpty()) {
-            return Optional.empty();
-          }
-          bsmInvokeArguments[i++] = arg.orElseThrow();
+      int i = 1;
+      for (final E element : elements) {
+        final Optional<? extends ConstantDesc> arg = element instanceof Constable c ? c.describeConstable() : f.apply(element);
+        if (arg == null || arg.isEmpty()) {
+          return Optional.empty();
         }
+        bsmInvokeArguments[i++] = arg.orElseThrow();
       }
       return Optional.of(DynamicConstantDesc.of(BSM_INVOKE, bsmInvokeArguments));
     }
   }
-  
+
 }
