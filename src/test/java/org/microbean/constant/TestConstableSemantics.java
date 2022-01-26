@@ -55,5 +55,4 @@ final class TestConstableSemantics {
     assertEquals(set, Constables.describeConstable(set).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
   }
 
-
 }
