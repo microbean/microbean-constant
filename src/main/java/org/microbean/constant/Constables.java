@@ -119,6 +119,10 @@ public final class Constables {
     }
   }
 
+  public static final <K extends Constable, V extends Constable> Optional<? extends ConstantDesc> describeConstable(final Entry<? extends K, ? extends V> entry) {
+    return describeConstable(entry, Constable::describeConstable, Constable::describeConstable);
+  }
+
   public static final <K, V> Optional<? extends ConstantDesc> describeConstable(final Entry<? extends K, ? extends V> entry,
                                                                                 final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
                                                                                 final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
