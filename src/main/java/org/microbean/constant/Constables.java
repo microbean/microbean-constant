@@ -57,19 +57,31 @@ public final class Constables {
       return Optional.of(cd);
     }
   }
-  
+
   public static final Optional<? extends ConstantDesc> describeConstable(final Constable c) {
     return c == null ? Optional.of(NULL) : c.describeConstable();
   }
-  
+
+  public static final <E extends Constable> Optional<? extends ConstantDesc> describeConstable(final List<? extends E> elements) {
+    return describeConstable(elements, Constable::describeConstable);
+  }
+
   public static final <E> Optional<? extends ConstantDesc> describeConstable(final List<? extends E> elements,
                                                                              final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     return describeConstable(elements, CD_List, f);
   }
 
+  public static final <E extends Constable> Optional<? extends ConstantDesc> describeConstable(final Set<? extends E> elements) {
+    return describeConstable(elements, Constable::describeConstable);
+  }
+
   public static final <E> Optional<? extends ConstantDesc> describeConstable(final Set<? extends E> elements,
                                                                              final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     return describeConstable(elements, CD_Set, f);
+  }
+
+  public static final <K extends Constable, V extends Constable> Optional<? extends ConstantDesc> describeConstable(final Map<? extends K, ? extends V> map) {
+    return describeConstable(map, Constable::describeConstable, Constable::describeConstable);
   }
 
   public static final <K, V> Optional<? extends ConstantDesc> describeConstable(final Map<? extends K, ? extends V> map,
@@ -139,7 +151,7 @@ public final class Constables {
       return Optional.empty();
     }
   }
-  
+
   private static final <E> Optional<? extends ConstantDesc> describeConstable(final Collection<? extends E> elements,
                                                                               final ClassDesc listOrSetClassDesc,
                                                                               final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {

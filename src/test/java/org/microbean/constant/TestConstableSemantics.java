@@ -20,8 +20,10 @@ import java.lang.constant.ConstantDesc;
 
 import java.lang.invoke.MethodHandles;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import java.util.function.Function;
 
@@ -38,7 +40,19 @@ final class TestConstableSemantics {
   @Test
   final void testMap() throws ReflectiveOperationException {
     final Map<String, String> map = Map.of("a", "b", "c", "d");
-    assertEquals(map, Constables.describeConstable(map, String::describeConstable, String::describeConstable).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
+    assertEquals(map, Constables.describeConstable(map).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
+  }
+
+  @Test
+  final void testList() throws ReflectiveOperationException {
+    final List<String> list = List.of("a", "b", "c", "d");
+    assertEquals(list, Constables.describeConstable(list).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
+  }
+
+  @Test
+  final void testSet() throws ReflectiveOperationException {
+    final Set<String> set = Set.of("a", "b", "c", "d");
+    assertEquals(set, Constables.describeConstable(set).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
   }
 
 }
