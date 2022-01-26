@@ -93,7 +93,8 @@ public final class Constables {
         MethodHandleDesc.ofMethod(DirectMethodHandleDesc.Kind.INTERFACE_STATIC,
                                   CD_Map,
                                   "ofEntries",
-                                  MethodTypeDesc.of(Entry.class.describeConstable().orElseThrow().arrayType()));
+                                  MethodTypeDesc.of(CD_Map,
+                                                    Entry.class.describeConstable().orElseThrow().arrayType()));
       int i = 1;
       for (final Entry<? extends K, ? extends V> entry : map.entrySet()) {
         final Optional<? extends ConstantDesc> e = describeConstable(entry, kf, vf);
