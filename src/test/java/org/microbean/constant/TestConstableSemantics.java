@@ -16,20 +16,30 @@
  */
 package org.microbean.constant;
 
-import java.lang.constant.ConstantDesc;
+import java.lang.constant.Constable;
+import java.lang.constant.DynamicConstantDesc;
+import java.lang.constant.MethodHandleDesc;
+import java.lang.constant.MethodTypeDesc;
 
 import java.lang.invoke.MethodHandles;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-
-import java.util.function.Function;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
+import static java.lang.constant.ConstantDescs.BSM_INVOKE;
+import static java.lang.constant.DirectMethodHandleDesc.Kind.INTERFACE_STATIC;
+
+import static org.microbean.constant.ConstantDescs.CD_Comparator;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 final class TestConstableSemantics {
 
@@ -51,8 +61,23 @@ final class TestConstableSemantics {
 
   @Test
   final void testSet() throws ReflectiveOperationException {
-    final Set<String> set = Set.of("a", "b", "c", "d");
-    assertEquals(set, Constables.describeConstable(set).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
+    final SortedSet<String> set = new TreeSet<>(Comparator.reverseOrder());
+    set.addAll(List.of("a", "b", "c", "d"));
+    assertNotNull(set.comparator());
+    @SuppressWarnings("unchecked")
+    final SortedSet<String> result =
+      (SortedSet<String>)Constables.describeConstable(set,
+                                                      c -> Optional.of(DynamicConstantDesc.of(BSM_INVOKE,
+                                                                                              MethodHandleDesc.ofMethod(INTERFACE_STATIC,
+                                                                                                                        CD_Comparator,
+                                                                                                                        "reverseOrder",
+                                                                                                                        MethodTypeDesc.of(CD_Comparator)))),
+                                                      Constable::describeConstable)
+      .orElseThrow()
+      .resolveConstantDesc(MethodHandles.lookup());
+    assertThrows(UnsupportedOperationException.class, () -> result.add("e"));
+    assertEquals(set.comparator(), result.comparator());
+    assertEquals(set, result);
   }
 
 }
