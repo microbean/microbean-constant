@@ -39,6 +39,13 @@
         <type>jar</type>
       </dependency>
 
+      <dependency>
+        <groupId>org.microbean</groupId>
+        <artifactId>microbean-invoke</artifactId>
+        <version>0.0.1</version>
+        <type>jar</type>
+      </dependency>
+
 
     </dependencies>
   </dependencyManagement>
@@ -54,6 +61,17 @@
         <artifactId>microbean-development-annotations</artifactId>
         <type>jar</type>
         <scope>compile</scope>
+    </dependency>
+
+
+    <!-- Provided-scoped dependencies. -->
+
+
+    <dependency>
+      <groupId>org.microbean</groupId>
+      <artifactId>microbean-invoke</artifactId>
+      <type>jar</type>
+      <scope>provided</scope>
     </dependency>
 
 
