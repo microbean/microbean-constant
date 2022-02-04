@@ -48,6 +48,11 @@ final class TestConstableSemantics {
   }
 
   @Test
+  final void testMapEntryClassName() {
+    assertEquals("java.util.Map$Entry", Map.Entry.class.getName());
+  }
+
+  @Test
   final void testMap() throws ReflectiveOperationException {
     final Map<String, String> map = Map.of("a", "b", "c", "d");
     assertEquals(map, Constables.describeConstable(map).orElseThrow().resolveConstantDesc(MethodHandles.lookup()));
