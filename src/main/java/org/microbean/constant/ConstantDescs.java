@@ -18,32 +18,94 @@ package org.microbean.constant;
 
 import java.lang.constant.ClassDesc;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+/**
+ * A utiliy class containing useful {@link
+ * java.lang.constant.ConstantDesc}s (mostly {@link ClassDesc}s).
+ *
+ * @author <a href="https://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ */
+public final class ConstantDescs {
 
-final class ConstantDescs {
 
-  static final ClassDesc CD_Collections = Collections.class.describeConstable().orElseThrow();
+  /*
+   * Static fields.
+   */
 
-  static final ClassDesc CD_Comparator = Comparator.class.describeConstable().orElseThrow();
 
-  static final ClassDesc CD_Entry = Entry.class.describeConstable().orElseThrow();
-  
-  static final ClassDesc CD_SortedMap = SortedMap.class.describeConstable().orElseThrow();
+  /**
+   * A {@link ClassDesc} describing {@link java.util.Collections
+   * java.util.Collections}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_Collections = ClassDesc.of("java.util.Collections");
 
-  static final ClassDesc CD_SortedSet = SortedSet.class.describeConstable().orElseThrow();
+  /**
+   * A {@link ClassDesc} describing {@link java.util.Comparator
+   * java.util.Comparator}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_Comparator = ClassDesc.of("java.util.Comparator");
 
-  static final ClassDesc CD_TreeMap = TreeMap.class.describeConstable().orElseThrow();
+  /**
+   * A {@link ClassDesc} describing {@link
+   * java.lang.constant.Constable java.lang.constant.Constable}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_Constable = ClassDesc.of("java.lang.constant.Constable");
 
-  static final ClassDesc CD_TreeSet = TreeSet.class.describeConstable().orElseThrow();
-  
+  /**
+   * A {@link ClassDesc} describing {@link java.util.Map.Entry
+   * java.util.Map.Entry}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_Entry = ClassDesc.of("java.util.Map$Entry");
+
+  /**
+   * A {@link ClassDesc} describing {@link java.util.SortedMap
+   * java.util.SortedMap}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_SortedMap = ClassDesc.of("java.util.SortedMap");
+
+  /**
+   * A {@link ClassDesc} describing {@link java.util.SortedSet
+   * java.util.SortedSet}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_SortedSet = ClassDesc.of("java.util.SortedSet");
+
+  /**
+   * A {@link ClassDesc} describing {@link java.util.TreeMap
+   * java.util.TreeMap}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_TreeMap = ClassDesc.of("java.util.TreeMap");
+
+  /**
+   * A {@link ClassDesc} describing {@link java.util.TreeSet
+   * java.util.TreeSet}.
+   *
+   * @nullability This field is never {@code null}.
+   */
+  public static final ClassDesc CD_TreeSet = ClassDesc.of("java.util.TreeSet");
+
+
+  /*
+   * Constructors.
+   */
+
+
   private ConstantDescs() {
     super();
   }
-  
+
+
 }

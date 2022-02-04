@@ -55,11 +55,38 @@ import static org.microbean.constant.ConstantDescs.CD_TreeSet;
 
 import static org.microbean.invoke.ConstantDescs.CD_BootstrapMethods;
 
+/**
+ * A utility class containing {@code static} methods that can describe
+ * various things in {@link Constable} ways.
+ *
+ * @author <a href="https://about.me/lairdnelson"
+ * target="_parent">Laird Nelson</a>
+ *
+ * @see #describeConstable(Collection)
+ *
+ * @see #describeConstable(Map)
+ *
+ * @see #describeConstable(Entry)
+ *
+ * @see Constable
+ */
 public final class Constables {
 
+
+  /*
+   * Constructors.
+   */
+
+  
   private Constables() {
     super();
   }
+
+
+  /*
+   * Static methods.
+   */
+  
 
   public static final Optional<? extends ConstantDesc> describeConstable(final ConstantDesc cd) {
     if (cd == null) {
