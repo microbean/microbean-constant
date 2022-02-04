@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.microbean.constant","l":"Constables"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.microbean.constant","l":"Constables"},{"p":"org.microbean.constant","l":"ConstantDescs"}];updateSearchResults();
