@@ -77,7 +77,7 @@ public final class Constables {
    * Constructors.
    */
 
-  
+
   private Constables() {
     super();
   }
@@ -86,7 +86,7 @@ public final class Constables {
   /*
    * Static methods.
    */
-  
+
 
   public static final Optional<? extends ConstantDesc> describeConstable(final ConstantDesc cd) {
     if (cd == null) {

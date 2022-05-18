@@ -24,7 +24,7 @@
 module org.microbean.constant {
 
   requires org.microbean.invoke;
-  
+
   exports org.microbean.constant;
-  
+
 }
