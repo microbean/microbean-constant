@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.microbean</groupId>
     <artifactId>microbean-pluginmanagement-pom</artifactId>
-    <version>18</version>
+    <version>21</version>
     <relativePath />
   </parent>
 
@@ -34,15 +34,8 @@
 
       <dependency>
         <groupId>org.microbean</groupId>
-        <artifactId>microbean-development-annotations</artifactId>
-        <version>0.2.12</version>
-        <type>jar</type>
-      </dependency>
-
-      <dependency>
-        <groupId>org.microbean</groupId>
         <artifactId>microbean-invoke</artifactId>
-        <version>0.0.4</version>
+        <version>0.0.15</version>
         <type>jar</type>
       </dependency>
 
@@ -53,26 +46,15 @@
   <dependencies>
 
 
-    <!-- Compile-scoped dependencies. -->
+    <!-- Test-scoped dependencies. -->
 
-
-    <dependency>
-        <groupId>org.microbean</groupId>
-        <artifactId>microbean-development-annotations</artifactId>
-        <type>jar</type>
-        <scope>compile</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.microbean</groupId>
       <artifactId>microbean-invoke</artifactId>
       <type>jar</type>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
-
-
-    <!-- Test-scoped dependencies. -->
-
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -96,16 +78,6 @@
       <plugins>
 
         <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <compilerArgs>
-              <arg>-Xlint:all</arg>
-              <arg>-Xlint:-preview</arg>
-              <arg>-Xpkginfo:always</arg>
-            </compilerArgs>
-          </configuration>
-        </plugin>
-        <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <additionalOptions>
@@ -116,13 +88,8 @@
           </configuration>
         </plugin>
         <plugin>
-          <artifactId>maven-scm-publish-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <argLine>--add-opens org.microbean.constant/org.microbean.constant=ALL-UNNAMED</argLine>
             <!-- See https://junit.org/junit5/docs/snapshot/user-guide/#running-tests-build-maven-config-params -->
             <!-- See https://github.com/apache/maven-surefire/blob/eb48f1b59ca5ccf6954ef33ecab03dbaf93214cd/surefire-providers/surefire-junit-platform/src/main/java/org/apache/maven/surefire/junitplatform/JUnitPlatformProvider.java#L242-L262 -->
             <properties>
@@ -148,14 +115,13 @@
 
     <!-- maven-compiler-plugin properties -->
     <maven.compiler.release>17</maven.compiler.release>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
 
     <!-- maven-javadoc-plugin properties -->
     <detectJavaApiLink>false</detectJavaApiLink>
-    <links>https://docs.oracle.com/en/java/javase/17/docs/api,https://microbean.github.io/microbean-development-annotations/apidocs/</links>
+    <links>https://docs.oracle.com/en/java/javase/17/docs/api</links>
 
-    <!-- maven-release-plugin properties; see http://maven.apache.org/maven-release/maven-release-plugin/ -->
+    <!-- maven-release-plugin properties;
+         see http://maven.apache.org/maven-release/maven-release-plugin/ -->
     <goals>deploy,post-site,scm-publish:publish-scm</goals>
 
     <!-- maven-scm-publish-plugin properties;
