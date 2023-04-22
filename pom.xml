@@ -35,7 +35,7 @@
       <dependency>
         <groupId>org.microbean</groupId>
         <artifactId>microbean-invoke</artifactId>
-        <version>0.0.14-SNAPSHOT</version>
+        <version>0.0.15</version>
         <type>jar</type>
       </dependency>
 
@@ -46,20 +46,15 @@
   <dependencies>
 
 
-    <!-- Runtime-scoped dependencies. -->
+    <!-- Test-scoped dependencies. -->
 
 
     <dependency>
       <groupId>org.microbean</groupId>
       <artifactId>microbean-invoke</artifactId>
       <type>jar</type>
-      <scope>runtime</scope>
-      <optional>true</optional>
+      <scope>test</scope>
     </dependency>
-
-
-    <!-- Test-scoped dependencies. -->
-
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>

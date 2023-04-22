@@ -47,7 +47,6 @@ import static org.microbean.constant.ConstantDescs.CD_Collections;
 import static org.microbean.constant.ConstantDescs.CD_Comparator;
 import static org.microbean.constant.ConstantDescs.CD_Entry;
 import static org.microbean.constant.ConstantDescs.CD_HashSet;
-import static org.microbean.constant.ConstantDescs.CD_Iterable;
 import static org.microbean.constant.ConstantDescs.CD_Optional;
 import static org.microbean.constant.ConstantDescs.CD_SimpleImmutableEntry;
 import static org.microbean.constant.ConstantDescs.CD_SortedMap;
@@ -264,17 +263,20 @@ public final class Constables {
     }
 
     // If the set has a user-supplied Comparator, we need to describe it as a ConstantDesc too.
-    final Optional<? extends ConstantDesc> comparatorDesc = extractComparatorDesc(set.comparator(), cf);
+    final ConstantDesc comparatorDesc = describeComparator(set.comparator(), cf);
+    if (comparatorDesc == null) {
+      return Optional.empty();
+    }
 
     if (set.isEmpty()) {
-      if (comparatorDesc.isPresent()) {
-        return
-          Optional.of(callStatic(CD_BootstrapMethods,
-                                 "immutableSortedSetOf",
-                                 MethodTypeDesc.of(CD_SortedSet, CD_Comparator),
-                                 comparatorDesc.orElseThrow()));
+      if (comparatorDesc == NULL) {
+        return Optional.of(callStatic(CD_Collections, "emptySortedSet", MethodTypeDesc.of(CD_SortedSet)));
       }
-      return Optional.of(callStatic(CD_Collections, "emptySortedSet", MethodTypeDesc.of(CD_SortedSet)));
+      return
+        Optional.of(callStatic(CD_BootstrapMethods,
+                               "immutableSortedSetOf",
+                               MethodTypeDesc.of(CD_SortedSet, CD_Comparator),
+                               comparatorDesc));
     }
 
     final ConstantDesc[] args = elements(set, f);
@@ -282,21 +284,21 @@ public final class Constables {
       return Optional.empty();
     }
 
-    final ConstantDesc unsortedList = asList(args);
+    final ConstantDesc unsortedListDesc = asList(args);
 
-    if (comparatorDesc.isPresent()) {
+    if (comparatorDesc == NULL) {
       return
         Optional.of(callStatic(CD_BootstrapMethods,
                                "immutableSortedSetOf",
-                               MethodTypeDesc.of(CD_SortedSet, CD_Iterable, CD_Comparator),
-                               unsortedList,
-                               comparatorDesc.orElseThrow()));
+                               MethodTypeDesc.of(CD_SortedSet, CD_Collection),
+                               unsortedListDesc));
     }
     return
       Optional.of(callStatic(CD_BootstrapMethods,
                              "immutableSortedSetOf",
-                             MethodTypeDesc.of(CD_SortedSet, CD_Iterable),
-                             unsortedList));
+                             MethodTypeDesc.of(CD_SortedSet, CD_Collection, CD_Comparator),
+                             unsortedListDesc,
+                             comparatorDesc));
   }
 
   private static final <E> ConstantDesc[] elements(final Collection<? extends E> source,
@@ -397,34 +399,37 @@ public final class Constables {
     }
 
     // If the map has a user-supplied Comparator, we need to describe it as a ConstantDesc too.
-    final Optional<? extends ConstantDesc> comparatorDesc = extractComparatorDesc(map.comparator(), cf);
-
-    if (map.isEmpty()) {
-      if (comparatorDesc.isPresent()) {
-        return
-          Optional.of(callStatic(CD_BootstrapMethods,
-                                 "immutableSortedMapOf",
-                                 MethodTypeDesc.of(CD_SortedMap, CD_Comparator),
-                                 comparatorDesc.orElseThrow()));
-      }
-      return Optional.of(callStatic(CD_Collections, "emptySortedMap", MethodTypeDesc.of(CD_SortedMap)));
+    final ConstantDesc comparatorDesc = describeComparator(map.comparator(), cf);
+    if (comparatorDesc == null) {
+      return Optional.empty();
     }
 
-    final ConstantDesc entryList = asList(entries(map, kf, vf, false));
+    if (map.isEmpty()) {
+      if (comparatorDesc == NULL) {
+        return Optional.of(callStatic(CD_Collections, "emptySortedMap", MethodTypeDesc.of(CD_SortedMap)));
+      }
+      return
+        Optional.of(callStatic(CD_BootstrapMethods,
+                               "immutableEmptySortedMap",
+                               MethodTypeDesc.of(CD_SortedMap, CD_Comparator),
+                               comparatorDesc));
+    }
 
-    if (comparatorDesc.isPresent()) {
+    final ConstantDesc entriesListDesc = asList(entries(map, kf, vf, false));
+
+    if (comparatorDesc == NULL) {
       return
         Optional.of(callStatic(CD_BootstrapMethods,
                                "immutableSortedMapOf",
-                               MethodTypeDesc.of(CD_SortedMap, CD_Iterable, CD_Comparator),
-                               entryList,
-                               comparatorDesc.orElseThrow()));
+                               MethodTypeDesc.of(CD_SortedMap, CD_Collection),
+                               entriesListDesc));
     }
     return
       Optional.of(callStatic(CD_BootstrapMethods,
                              "immutableSortedMapOf",
-                             MethodTypeDesc.of(CD_SortedMap, CD_Iterable),
-                             entryList));
+                             MethodTypeDesc.of(CD_SortedMap, CD_Collection, CD_Comparator),
+                             entriesListDesc,
+                             comparatorDesc));
   }
 
   private static final <K, V> ConstantDesc[] entries(final Map<? extends K, ? extends V> map,
@@ -508,11 +513,13 @@ public final class Constables {
     return Optional.empty();
   }
 
-  private static final Optional<? extends ConstantDesc> extractComparatorDesc(final Comparator<?> comparator,
-                                                                              final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf) {
+  private static final ConstantDesc describeComparator(final Comparator<?> comparator,
+                                                       final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf) {
     return
-      comparator == null || cf == null ? Optional.empty() :
-      comparator instanceof Constable c ? c.describeConstable() : cf.apply(comparator);
+      comparator == null ? NULL :
+      comparator instanceof Constable c ? c.describeConstable().orElse(null) :
+      cf == null ? null :
+      cf.apply(comparator).orElse(null);
   }
 
   private static final DynamicConstantDesc<?> asList(final ConstantDesc[] args) {
