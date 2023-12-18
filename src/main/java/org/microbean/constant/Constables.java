@@ -102,7 +102,7 @@ public final class Constables {
       Optional.empty();
   }
 
-  // Note that this describles the Optional itself, i.e. this is not a convenient shortcut to get to the optional's payload
+  // Note that this describes the Optional itself, i.e. this is not a convenient shortcut to get to the optional's payload
   public static final Optional<? extends ConstantDesc> describeConstable(final Optional<?> o) {
     return describeConstable(o, Constables::describeConstable);
   }

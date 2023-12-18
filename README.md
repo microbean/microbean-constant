@@ -28,7 +28,7 @@ dependency:
   <groupId>org.microbean</groupId>
   <artifactId>microbean-constant</artifactId>
   <!-- Always check https://search.maven.org/artifact/org.microbean/microbean-constant for up-to-date available versions. -->
-  <version>0.0.5</version>
+  <version>0.0.7</version>
 </dependency>
 ```
 
