@@ -19,11 +19,24 @@
   <url>https://microbean.github.io/microbean-constant</url>
 
   <scm>
-    <connection>scm:git:git@github.com:microbean/microbean-constant.git</connection>
-    <developerConnection>scm:git:git@github.com:microbean/microbean-constant.git</developerConnection>
+    <connection>${scm.url}</connection>
+    <developerConnection>${scm.url}</developerConnection>
     <url>https://github.com/microbean/microbean-constant/</url>
     <tag>HEAD</tag>
   </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>sonatype-oss-repository-hosting</id>
+      <!-- See https://central.sonatype.org/publish/publish-maven/#distribution-management-and-authentication -->
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <site>
+      <id>Github Pages</id>
+      <name>microBean™ Constant Site</name>
+      <url>https://microbean.github.io/microbean-constant/</url>
+    </site>
+  </distributionManagement>
 
   <dependencyManagement>
     <dependencies>
@@ -78,6 +91,112 @@
       <plugins>
 
         <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <checkstyleRules>
+              <module name="Checker">
+                <module name="BeforeExecutionExclusionFileFilter">
+                  <property name="fileNamePattern" value="module\-info\.java$" />
+                </module>
+                <module name="FileTabCharacter">
+                  <property name="eachLine" value="true" />
+                </module>
+                <module name="JavadocPackage" />
+                <module name="LineLength">
+                  <property name="max" value="160" />
+                </module>
+                <module name="NewlineAtEndOfFile">
+                  <property name="lineSeparator" value="lf" />
+                </module>
+                <module name="TreeWalker">
+                  <module name="AnnotationLocation">
+                    <property name="allowSamelineSingleParameterlessAnnotation" value="false" />
+                  </module>
+                  <module name="AnnotationUseStyle" />
+                  <module name="ArrayTypeStyle" />
+                  <module name="AvoidNestedBlocks" />
+                  <module name="AvoidStarImport" />
+                  <module name="ClassMemberImpliedModifier" />
+                  <module name="CommentsIndentation" />
+                  <module name="DeclarationOrder" />
+                  <module name="DefaultComesLast" />
+                  <module name="EmptyBlock" />
+                  <module name="EmptyCatchBlock" />
+                  <module name="EmptyStatement" />
+                  <module name="EqualsHashCode" />
+                  <module name="ExplicitInitialization" />
+                  <module name="FinalClass" />
+                  <module name="FinalLocalVariable">
+                    <property name="tokens" value="VARIABLE_DEF,PARAMETER_DEF" />
+                  </module>
+                  <module name="HideUtilityClassConstructor" />
+                  <module name="InnerAssignment" />
+                  <module name="InnerTypeLast" />
+                  <module name="InterfaceIsType" />
+                  <module name="InterfaceMemberImpliedModifier">
+                    <property name="violateImpliedAbstractMethod" value="false" />
+                  </module>
+                  <module name="InvalidJavadocPosition" />
+                  <module name="JavadocContentLocationCheck" />
+                  <module name="JavadocMissingWhitespaceAfterAsterisk" />
+                  <module name="JavadocParagraph" />
+                  <module name="JavadocStyle" />
+                  <module name="JavadocVariable">
+                    <property name="scope" value="protected" />
+                  </module>
+                  <module name="LeftCurly" />
+                  <module name="MethodTypeParameterName" />
+                  <module name="MissingCtor" />
+                  <module name="MissingDeprecated" />
+                  <module name="MissingJavadocMethod" />
+                  <module name="MissingJavadocPackage" />
+                  <module name="MissingJavadocType">
+                    <property name="scope" value="protected" />
+                  </module>
+                  <module name="MissingOverride" />
+                  <module name="MultipleVariableDeclarations" />
+                  <module name="ModifierOrder" />
+                  <module name="NeedBraces" />
+                  <module name="NoArrayTrailingComma" />
+                  <module name="NoFinalizer" />
+                  <module name="NonEmptyAtclauseDescription" />
+                  <module name="OneStatementPerLine" />
+                  <module name="OneTopLevelClass" />
+                  <module name="OuterTypeFilename" />
+                  <module name="OverloadMethodsDeclarationOrder" />
+                  <module name="PackageDeclaration" />
+                  <module name="RedundantImport" />
+                  <module name="RegexpSinglelineJava">
+                    <property name="format" value="\s+$" />
+                    <property name="message" value="File contains trailing whitespace." />
+                  </module>
+                  <module name="RequireEmptyLineBeforeBlockTagGroup" />
+                  <module name="RequireThis" />
+                  <module name="RightCurly" />
+                  <module name="SummaryJavadocCheck" />
+                  <module name="SuppressWarningsHolder" />
+                  <module name="UnnecessarySemicolonAfterOuterTypeDeclaration" />
+                  <module name="UnnecessarySemicolonAfterTypeMemberDeclaration" />
+                  <module name="UnnecessarySemicolonInEnumeration" />
+                  <module name="UnnecessarySemicolonInTryWithResources" />
+                  <module name="UnusedImports" />
+                  <module name="UnusedLocalVariable" />
+                  <module name="UpperEll" />
+                  <module name="VariableDeclarationUsageDistance" />
+                </module>
+                <property name="charset" value="${project.build.sourceEncoding}" />
+                <property name="tabWidth" value="2" />
+              </module>
+            </checkstyleRules>
+            <propertyExpansion>
+              project.basedir=${project.basedir}
+              project.build.sourceEncoding=${project.build.sourceEncoding}
+            </propertyExpansion>
+          </configuration>
+        </plugin>
+
+        <plugin>
           <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
             <additionalOptions>
@@ -87,6 +206,7 @@
             <docfilessubdirs>true</docfilessubdirs>
           </configuration>
         </plugin>
+
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
@@ -124,6 +244,8 @@
          see http://maven.apache.org/maven-release/maven-release-plugin/ -->
     <goals>deploy,post-site,scm-publish:publish-scm</goals>
 
+    <scm.url>scm:git:git@github.com:microbean/microbean-function.git</scm.url>
+
     <!-- maven-scm-publish-plugin properties;
          see https://maven.apache.org/plugins/maven-scm-publish-plugin/publish-scm-mojo.html -->
     <scmpublish.content>${project.reporting.outputDirectory}</scmpublish.content>
@@ -134,6 +256,16 @@
 
   <reporting>
     <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <reportSets>
