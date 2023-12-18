@@ -150,9 +150,10 @@ public final class Constables {
     return describeConstable(elements, Constables::empty, f);
   }
 
-  public static final <E> Optional<? extends ConstantDesc> describeConstable(final Collection<? extends E> elements,
-                                                                             final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                             final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
+  public static final <E> Optional<? extends ConstantDesc>
+    describeConstable(final Collection<? extends E> elements,
+                      final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                      final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     return
       elements == null ? Optional.of(NULL) :
       elements instanceof List<? extends E> l ? describeConstable0(l, CD_List, cf, f) :
@@ -178,9 +179,10 @@ public final class Constables {
     return describeConstable0(elements, CD_Set, Constables::empty, f);
   }
 
-  public static final <E> Optional<? extends ConstantDesc> describeConstable(final Set<? extends E> elements,
-                                                                             final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                             final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
+  public static final <E> Optional<? extends ConstantDesc>
+    describeConstable(final Set<? extends E> elements,
+                      final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                      final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     return describeConstable0(elements, CD_Set, cf, f);
   }
 
@@ -194,10 +196,11 @@ public final class Constables {
     return describeConstable0(map, Constables::empty, kf, vf);
   }
 
-  public static final <K, V> Optional<? extends ConstantDesc> describeConstable(final Map<? extends K, ? extends V> map,
-                                                                                final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                                final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
-                                                                                final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
+  public static final <K, V> Optional<? extends ConstantDesc>
+    describeConstable(final Map<? extends K, ? extends V> map,
+                      final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                      final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
+                      final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
     return describeConstable0(map, cf, kf, vf);
   }
 
@@ -214,10 +217,11 @@ public final class Constables {
       describeConstable(entry.getKey(), entry.getValue(), kf, vf);
   }
 
-  public static final <K, V> Optional<? extends ConstantDesc> describeConstable(final K k,
-                                                                                final V v,
-                                                                                final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
-                                                                                final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
+  public static final <K, V> Optional<? extends ConstantDesc>
+    describeConstable(final K k,
+                      final V v,
+                      final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
+                      final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
     final Optional<? extends ConstantDesc> key =
       k instanceof Constable c ? c.describeConstable() : kf == null ? describeConstable(k) : kf.apply(k);
     if (key.isPresent()) {
@@ -253,9 +257,10 @@ public final class Constables {
    */
 
 
-  private static final <E> Optional<? extends ConstantDesc> describeConstable0(final SortedSet<? extends E> set,
-                                                                               final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                               Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
+  private static final <E> Optional<? extends ConstantDesc>
+    describeConstable0(final SortedSet<? extends E> set,
+                       final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                       final Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     if (set == null) {
       return Optional.of(NULL);
     } else if (set instanceof Constable c) {
@@ -301,28 +306,11 @@ public final class Constables {
                              comparatorDesc));
   }
 
-  private static final <E> ConstantDesc[] elements(final Collection<? extends E> source,
-                                                   Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
-    if (f == null) {
-      f = Constables::describeConstable;
-    }
-    final ConstantDesc[] args = new ConstantDesc[source.size()];
-    int i = 0;
-    for (final E element : source) {
-      final Optional<? extends ConstantDesc> arg = element instanceof Constable c ? c.describeConstable() : f.apply(element);
-      if (arg == null || arg.isEmpty()) {
-        // If there's even one thing that cannot be described, then the whole thing cannot be described.
-        return EMPTY_CONSTANTDESC_ARRAY;
-      }
-      args[i++] = arg.orElseThrow();
-    }
-    return args;
-  }
-
-  private static final <E> Optional<? extends ConstantDesc> describeConstable0(final Collection<? extends E> elements,
-                                                                               final ClassDesc listOrSetClassDesc,
-                                                                               final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                               Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
+  private static final <E> Optional<? extends ConstantDesc>
+    describeConstable0(final Collection<? extends E> elements,
+                       final ClassDesc listOrSetClassDesc,
+                       final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                       Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
     assert CD_List.equals(listOrSetClassDesc) || CD_Set.equals(listOrSetClassDesc) : String.valueOf(listOrSetClassDesc);
     if (elements == null) {
       return Optional.of(NULL);
@@ -388,10 +376,11 @@ public final class Constables {
                                       args));
   }
 
-  private static final <K, V> Optional<? extends ConstantDesc> describeConstable0(final SortedMap<? extends K, ? extends V> map,
-                                                                                  final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                                  final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
-                                                                                  final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
+  private static final <K, V> Optional<? extends ConstantDesc>
+    describeConstable0(final SortedMap<? extends K, ? extends V> map,
+                       final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                       final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
+                       final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
     if (map == null) {
       return Optional.of(NULL);
     } else if (map instanceof Constable c) {
@@ -432,6 +421,49 @@ public final class Constables {
                              comparatorDesc));
   }
 
+  private static final <K, V> Optional<? extends ConstantDesc>
+    describeConstable0(final Map<? extends K, ? extends V> map,
+                       final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
+                       final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
+                       final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
+    if (map == null) {
+      return Optional.of(NULL);
+    } else if (map instanceof Constable c) {
+      return c.describeConstable();
+    } else if (map instanceof SortedMap<? extends K, ? extends V> sm) {
+      return describeConstable0(sm, cf, kf, vf);
+    } else if (map.isEmpty()) {
+      // Map.of()
+      return Optional.of(callInterfaceStatic(CD_Map, "of", CD_Map));
+    }
+
+    final ConstantDesc[] args = entries(map, kf, vf, true);
+    if (args.length <= 0) {
+      return Optional.empty();
+    }
+
+    // Map.ofEntries(Map.Entry...)
+    return Optional.of(callInterfaceStatic(CD_Map, "ofEntries", MethodTypeDesc.of(CD_Map, CD_Entry.arrayType()), args));
+  }
+
+  private static final <E> ConstantDesc[] elements(final Collection<? extends E> source,
+                                                   Function<? super E, ? extends Optional<? extends ConstantDesc>> f) {
+    if (f == null) {
+      f = Constables::describeConstable;
+    }
+    final ConstantDesc[] args = new ConstantDesc[source.size()];
+    int i = 0;
+    for (final E element : source) {
+      final Optional<? extends ConstantDesc> arg = element instanceof Constable c ? c.describeConstable() : f.apply(element);
+      if (arg == null || arg.isEmpty()) {
+        // If there's even one thing that cannot be described, then the whole thing cannot be described.
+        return EMPTY_CONSTANTDESC_ARRAY;
+      }
+      args[i++] = arg.orElseThrow();
+    }
+    return args;
+  }
+
   private static final <K, V> ConstantDesc[] entries(final Map<? extends K, ? extends V> map,
                                                      final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
                                                      final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf,
@@ -455,30 +487,6 @@ public final class Constables {
     return args;
   }
 
-  private static final <K, V> Optional<? extends ConstantDesc> describeConstable0(final Map<? extends K, ? extends V> map,
-                                                                                  final Function<? super Comparator<?>, ? extends Optional<? extends ConstantDesc>> cf,
-                                                                                  final Function<? super K, ? extends Optional<? extends ConstantDesc>> kf,
-                                                                                  final Function<? super V, ? extends Optional<? extends ConstantDesc>> vf) {
-    if (map == null) {
-      return Optional.of(NULL);
-    } else if (map instanceof Constable c) {
-      return c.describeConstable();
-    } else if (map instanceof SortedMap<? extends K, ? extends V> sm) {
-      return describeConstable0(sm, cf, kf, vf);
-    } else if (map.isEmpty()) {
-      // Map.of()
-      return Optional.of(callInterfaceStatic(CD_Map, "of", CD_Map));
-    }
-
-    final ConstantDesc[] args = entries(map, kf, vf, true);
-    if (args.length <= 0) {
-      return Optional.empty();
-    }
-
-    // Map.ofEntries(Map.Entry...)
-    return Optional.of(callInterfaceStatic(CD_Map, "ofEntries", MethodTypeDesc.of(CD_Map, CD_Entry.arrayType()), args));
-  }
-
   private static final DynamicConstantDesc<?> construct(final ClassDesc cd, final ClassDesc[] constructorParameterTypes, final ConstantDesc... args) {
     final ConstantDesc[] newArgs = new ConstantDesc[args == null || args.length <= 0 ? 1 : args.length + 1];
     newArgs[0] = MethodHandleDesc.ofConstructor(cd, constructorParameterTypes);
@@ -500,7 +508,11 @@ public final class Constables {
     return call(DirectMethodHandleDesc.Kind.STATIC, cd, name, sig, args);
   }
 
-  private static final DynamicConstantDesc<?> call(final DirectMethodHandleDesc.Kind kind, final ClassDesc cd, final String name, final MethodTypeDesc sig, final ConstantDesc... args) {
+  private static final DynamicConstantDesc<?> call(final DirectMethodHandleDesc.Kind kind,
+                                                   final ClassDesc cd,
+                                                   final String name,
+                                                   final MethodTypeDesc sig,
+                                                   final ConstantDesc... args) {
     final ConstantDesc[] newArgs = new ConstantDesc[args == null || args.length == 0 ? 1 : args.length + 1];
     newArgs[0] = MethodHandleDesc.ofMethod(kind, cd, name, sig);
     if (newArgs.length > 1) {
