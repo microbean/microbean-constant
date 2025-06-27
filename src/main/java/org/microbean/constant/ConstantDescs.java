@@ -1,6 +1,6 @@
 /* -*- mode: Java; c-basic-offset: 2; indent-tabs-mode: nil; coding: utf-8-unix -*-
  *
- * Copyright © 2022–2023 microBean™.
+ * Copyright © 2022–2025 microBean™.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
@@ -31,63 +31,63 @@ public final class ConstantDescs {
   /**
    * A {@link ClassDesc} describing {@link java.util.Arrays java.util.Arrays}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Arrays = ClassDesc.of("java.util.Arrays");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.Collections java.util.Collections}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Collections = ClassDesc.of("java.util.Collections");
 
   /**
    * A {@link ClassDesc} describing {@link Comparable}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Comparable = ClassDesc.of("java.lang.Comparable");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.Comparator java.util.Comparator}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Comparator = ClassDesc.of("java.util.Comparator");
 
   /**
    * A {@link ClassDesc} describing {@link java.lang.constant.Constable java.lang.constant.Constable}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Constable = ClassDesc.of("java.lang.constant.Constable");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.HashSet java.util.HashSet}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Entry = ClassDesc.of("java.util.Map$Entry");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.Map.Entry java.util.Map.Entry}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_HashSet = ClassDesc.of("java.util.HashSet");
 
   /**
    * A {@link ClassDesc} describing {@link Iterable}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Iterable = ClassDesc.of("java.lang.Iterable");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.Optional java.util.Optional}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_Optional = ClassDesc.of("java.util.Optional");
 
@@ -95,35 +95,35 @@ public final class ConstantDescs {
    * A {@link ClassDesc} describing {@link java.util.AbstractMap.SimpleImmutableEntry
    * java.util.AbstractMap.SimpleImmutableEntry}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_SimpleImmutableEntry = ClassDesc.of("java.util.AbstractMap$SimpleImmutableEntry");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.SortedMap java.util.SortedMap}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_SortedMap = ClassDesc.of("java.util.SortedMap");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.SortedSet java.util.SortedSet}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_SortedSet = ClassDesc.of("java.util.SortedSet");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.TreeMap java.util.TreeMap}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_TreeMap = ClassDesc.of("java.util.TreeMap");
 
   /**
    * A {@link ClassDesc} describing {@link java.util.TreeSet java.util.TreeSet}.
    *
-   * @nullability This field is never {@code null}.
+   * @microbean.nullability This field is never {@code null}.
    */
   public static final ClassDesc CD_TreeSet = ClassDesc.of("java.util.TreeSet");
 

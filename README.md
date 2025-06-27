@@ -16,7 +16,7 @@ changes, regardless of project version and without notice.**
 
 # Requirements
 
-microBean™ Constant requires a Java runtime of version 17 or higher.
+microBean™ Constant requires a Java runtime of version 16 or higher.
 
 # Installation
 
@@ -28,7 +28,7 @@ dependency:
   <groupId>org.microbean</groupId>
   <artifactId>microbean-constant</artifactId>
   <!-- Always check https://search.maven.org/artifact/org.microbean/microbean-constant for up-to-date available versions. -->
-  <version>0.0.7</version>
+  <version>0.0.8</version>
 </dependency>
 ```
 
